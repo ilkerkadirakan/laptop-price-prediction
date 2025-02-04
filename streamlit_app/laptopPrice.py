@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from pkg_resources import require
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from streamlit import columns
 

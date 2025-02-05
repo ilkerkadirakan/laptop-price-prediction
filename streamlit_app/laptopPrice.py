@@ -160,8 +160,7 @@ if st.button("Tahmin Yap"):
     #st.write(f"Modelin beklediği fakat eksik olan sütunlar: {missing_cols}")
     #st.write(f"Fazladan bulunan sütunlar: {extra_cols}")
 
-    prediction = model.predict(input_data)[0]
-    predicted_price = np.expm1(prediction)  # Log dönüşümünü geri al
+    prediction_price = model.predict(input_data)[0]
 
     def get_exchange_rate(base_currency, target_currency):
         url = f"https://www.x-rates.com/calculator/?from={base_currency}&to={target_currency}&amount=1"

@@ -179,14 +179,14 @@ if st.button("Tahmin Yap"):
     rate_USD = get_exchange_rate("INR", "USD")
 
     if rate_TRY and rate_USD:
-        converted_price_TRY = rate_TRY * predicted_price
-        converted_price_USD = rate_USD * predicted_price
+        converted_price_TRY = rate_TRY * prediction_price
+        converted_price_USD = rate_USD * prediction_price
         print(f"Tahmini Fiyat (TRY): {converted_price_TRY:,.2f} TL")
         print(f"Tahmini Fiyat (USD): {converted_price_USD:,.2f} USD")
     else:
         print("Döviz kuru verisi alınamadı.")
 
-    st.write(f"Tahmini Fiyat: {predicted_price:,.2f} Rupi")
+    st.write(f"Tahmini Fiyat: {prediction_price:,.2f} Rupi")
     st.write(f"Tahmini Fiyat: {converted_price_TRY:,.2f} TL")
     st.write(f"Tahmini Fiyat: {converted_price_USD:,.2F} Dolar")
 

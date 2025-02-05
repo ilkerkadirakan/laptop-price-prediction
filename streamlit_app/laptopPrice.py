@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from pkg_resources import require
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from streamlit import columns
+import requests
+from bs4 import BeautifulSoup
 
 # Model ve veri yükleme
 model_path = 'streamlit_app/model.pkl'
@@ -162,9 +163,33 @@ if st.button("Tahmin Yap"):
     prediction = model.predict(input_data)[0]
     predicted_price = np.expm1(prediction)  # Log dönüşümünü geri al
 
+    def get_exchange_rate(base_currency, target_currency):
+        url = f"https://www.x-rates.com/calculator/?from={base_currency}&to={target_currency}&amount=1"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        rate = None
+        try:
+            rate = soup.find("span", class_="ccOutputTrail").previous_sibling.get_text()
+            return float(rate.replace(',', ''))
+        except Exception as e:
+            print(f"Hata oluştu: {e}")
+            return None
+
+    rate_TRY = get_exchange_rate("INR", "TRY")
+    rate_USD = get_exchange_rate("INR", "USD")
+
+    if rate_TRY and rate_USD:
+        converted_price_TRY = rate_TRY * predicted_price
+        converted_price_USD = rate_USD * predicted_price
+        print(f"Tahmini Fiyat (TRY): {converted_price_TRY:,.2f} TL")
+        print(f"Tahmini Fiyat (USD): {converted_price_USD:,.2f} USD")
+    else:
+        print("Döviz kuru verisi alınamadı.")
 
     st.write(f"Tahmini Fiyat: {predicted_price:,.2f} Rupi")
-
+    st.write(f"Tahmini Fiyat: {converted_price_TRY:,.2f} TL")
+    st.write(f"Tahmini Fiyat: {converted_price_USD:,.2F} Dolar")
 
 
 
